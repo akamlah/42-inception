@@ -1,0 +1,58 @@
+
+version: "2.2"
+
+volumes:
+
+  wp-content_volume:
+    name: wp-content_volume
+    driver: local
+    driver_opts:
+      device: /home/akamlah/data/wp-content_volume
+      o: bind
+      type: none
+
+  wp-database_volume:
+    name: wp-database_volume
+    driver: local
+    driver_opts:
+      device: /home/akamlah/data/wp-database_volume
+      o: bind
+      type: none
+
+networks:
+  inception_net:
+
+services:
+
+    php-wordpress:
+      build: ./services/php_wp
+      container_name: phpc
+      volumes:
+        - wp-content_volume:/var/www/akamlah.42.fr/html/
+      networks:
+        - inception_net
+      depends_on:
+        - mariadb
+      restart: on-failure
+
+    mariadb:
+      build: ./services/mariadb/
+      container_name: mdbc
+      volumes:
+        - wp-database_volume:/var/lib/mysql/
+      networks:
+        - inception_net
+      restart: on-failure
+
+    nginx:
+      build: ./services/nginx
+      container_name: wsc
+      ports:
+        - '443:443'
+      volumes:
+        - wp-content_volume:/var/www/akamlah.42.fr/html/
+      networks:
+        - inception_net
+      depends_on:
+        - php-wordpress
+      restart: on-failure
