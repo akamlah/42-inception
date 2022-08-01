@@ -35,14 +35,22 @@ VOLUME_DIR = /home/akamlah/data
 WP_CONTENT_VOLUME = $(VOLUME_DIR)/wp-content_volume
 WP_DB_VOLUME = $(VOLUME_DIR)/wp-database_volume
 
+# MAIN COMMAND: ------------------------------------
+COMPOSE = sudo docker-compose -f $(COMPOSE_FILE)
+# --------------------------------------------------
+
 all: $(NAME)
 
 $(NAME): $(ENV_FILE) $(COMPOSE_FILE) $(DOCKER_IMAGES) create_volumes
 	@echo "Building containers"
-	sudo docker-compose -f $(COMPOSE_FILE) --env-file $(ENV_FILE) up -d --build
+	$(COMPOSE) --env-file $(ENV_FILE) up -d --build
+
+create_volumes:
+	@sudo mkdir -p $(WP_DB_VOLUME) $(WP_CONTENT_VOLUME) \
+	&& sudo chmod 777  $(WP_DB_VOLUME) $(WP_CONTENT_VOLUME)
 
 clean:
-	sudo docker-compose -f $(COMPOSE_FILE) down
+	$(COMPOSE) down
 
 re: clean all
 
@@ -50,7 +58,9 @@ re: clean all
 
 # ADDITIONAL & DEVELOPMENT:
 
-# FCLEAN: clear cache, but clean should be enough in most cases, that is why 're' calls just 'clean'
+# FCLEAN: clears docker image build cache, but clean should be enough in most cases, that is why 
+# re' calls just 'clean'.
+# Use fclean only to restart from complete scratch.
 fclean: clean
 	(cd $(SRC_DIR) && sudo docker system prune -a)
 
@@ -59,10 +69,6 @@ fclean: clean
 
 new_volumes: create_volumes
 	sudo mkdir -p $(WP_DB_VOLUME) $(WP_CONTENT_VOLUME) \
-	&& sudo chmod 777  $(WP_DB_VOLUME) $(WP_CONTENT_VOLUME)
-
-create_volumes:
-	@sudo mkdir -p $(WP_DB_VOLUME) $(WP_CONTENT_VOLUME) \
 	&& sudo chmod 777  $(WP_DB_VOLUME) $(WP_CONTENT_VOLUME)
 
 # DEBUGGING methods:
@@ -74,11 +80,16 @@ logs:
 
 # Open terminals in the containers:
 
+# services and containers are named the same in the compose file
+NGINX_CONTAINER_NAME = nginx
+MARIADB_CONTAINER_NAME = mariadb
+PHP_WORDPRESS_CONTAINER_NAME = php_wordpress
+
 exec_mdb:
-	sudo docker-compose exec -it wsc /bin/bash
+	$(COMPOSE) exec $(NGINX_CONTAINER_NAME) /bin/bash
 
 exec_php:
-	sudo docker-compose exec -it phpc /bin/bash
+	$(COMPOSE) exec $(PHP_WORDPRESS_CONTAINER_NAME) /bin/bash
 
 exec_nginx:
-	sudo docker-compose exec -it mdbc /bin/bash
+	$(COMPOSE) exec $(NGINX_CONTAINER_NAME) /bin/bash

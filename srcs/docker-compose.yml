@@ -24,11 +24,11 @@ networks:
 
 services:
 
-    php-wordpress:
+    php_wordpress:
       build:
         context: ./requirements/php_wp/
         dockerfile: php_wp.dockerfile
-      container_name: phpc
+      container_name: php_wordpress
       volumes:
         - wp-content_volume:/var/www/akamlah.42.fr/html/
       networks:
@@ -41,7 +41,7 @@ services:
       build:
         context: ./requirements/mariadb/
         dockerfile: mariadb.dockerfile
-      container_name: mdbc
+      container_name: mariadb
       volumes:
         - wp-database_volume:/var/lib/mysql/
       networks:
@@ -52,7 +52,7 @@ services:
       build:
         context: ./requirements/nginx
         dockerfile: nginx.dockerfile
-      container_name: wsc
+      container_name: nginx
       ports:
         - '443:443'
       volumes:
@@ -60,5 +60,5 @@ services:
       networks:
         - inception_net
       depends_on:
-        - php-wordpress
+        - php_wordpress
       restart: on-failure
