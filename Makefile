@@ -4,21 +4,20 @@
 
 # REQUIRED TREE
 
-# ├── .gitignore
 # ├── Makefile
 # └── srcs
 #     ├── docker-compose.yml
 #     ├── .env
-#     └── services
+#     └── requirements
 #         ├── mariadb
-#         │   ├── Dockerfile
+#         │   ├── mariadb.dockerfile
 #         │   └── mariadb-entrypoint.sh
 #         ├── nginx
 #         │   ├── akamlah-42-fr_ssl.conf
-#         │   ├── Dockerfile
-#         │   └── nginx.conf
+#         │   ├── nginx.conf
+#         │   └── nginx.dockerfile
 #         └── php_wp
-#             ├── Dockerfile
+#             ├── php_wp.dockerfile
 #             └── wp-config.php
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -45,17 +44,13 @@ $(NAME): $(ENV_FILE) $(COMPOSE_FILE) $(DOCKER_IMAGES) create_volumes
 clean:
 	sudo docker-compose -f $(COMPOSE_FILE) down
 
-fclean: clean
-	(cd $(SRC_DIR) && sudo docker system prune -a)
-
 re: clean all
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-# DEVELOPMENT:
+# ADDITIONAL & DEVELOPMENT:
 
 # FCLEAN: clear cache, but clean should be enough in most cases, that is why 're' calls just 'clean'
-
 fclean: clean
 	(cd $(SRC_DIR) && sudo docker system prune -a)
 
