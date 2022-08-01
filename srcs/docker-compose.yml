@@ -25,7 +25,9 @@ networks:
 services:
 
     php-wordpress:
-      build: ./services/php_wp
+      build:
+        context: ./requirements/php_wp/
+        dockerfile: php_wp.dockerfile
       container_name: phpc
       volumes:
         - wp-content_volume:/var/www/akamlah.42.fr/html/
@@ -36,7 +38,9 @@ services:
       restart: on-failure
 
     mariadb:
-      build: ./services/mariadb/
+      build:
+        context: ./requirements/mariadb/
+        dockerfile: mariadb.dockerfile
       container_name: mdbc
       volumes:
         - wp-database_volume:/var/lib/mysql/
@@ -45,7 +49,9 @@ services:
       restart: on-failure
 
     nginx:
-      build: ./services/nginx
+      build:
+        context: ./requirements/nginx
+        dockerfile: nginx.dockerfile
       container_name: wsc
       ports:
         - '443:443'

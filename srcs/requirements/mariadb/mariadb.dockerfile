@@ -29,6 +29,8 @@ COPY ./mariadb-entrypoint.sh /usr/local/bin/
 
 STOPSIGNAL SIGQUIT
 
+VOLUME /var/lib/mysql
+
 ENTRYPOINT ["mariadb-entrypoint.sh"]
 
 CMD ["mysqld_safe"]
