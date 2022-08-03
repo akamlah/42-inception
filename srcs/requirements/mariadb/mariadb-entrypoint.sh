@@ -17,8 +17,8 @@ DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.
 DROP DATABASE IF EXISTS test;
 DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%';
 CREATE DATABASE IF NOT EXISTS example_db;
-CREATE USER IF NOT EXISTS 'example_user'@'%' IDENTIFIED BY 'example123';
-GRANT ALL ON example_db.* TO 'example_user'@'%' IDENTIFIED BY 'example123';
+CREATE USER IF NOT EXISTS '$WP_USER'@'%' IDENTIFIED BY '$WP_PASSWORD';
+GRANT ALL ON example_db.* TO '$WP_USER'@'%' IDENTIFIED BY '$WP_PASSWORD';
 FLUSH PRIVILEGES;
 _EOF_
 
