@@ -19,42 +19,24 @@
  */
 
 /** MySQL database name */
-// define( 'DB_NAME', getenv('WP_DB_NAME') );
-
-/** MySQL database username */
-// define( 'DB_USER', getenv('WP_DB_USER') );
-
-/** MySQL database password */
-// define( 'DB_PASSWORD', getenv('WP_DB_PASSWORD') );
-
-/** MySQL hostname */
-// define( 'DB_HOST', getenv('WP_DB_HOST') );
-
-/** Database Charset to use in creating database tables. */
-// define( 'DB_CHARSET', getenv('WP_DB_CHARSET') );
-
-/** The Database Collate type. Don't change this if in doubt. */
-// define( 'DB_COLLATE', getenv('WP_DB_COLLATE') );
-
-
-
 /** MySQL database name */
-define( 'DB_NAME', 'wordpress' );
+define( 'DB_NAME', 'example_db' );
 
 /** MySQL database username */
-define( 'DB_USER', getenv('WP_DB_USER') );
+define( 'DB_USER', 'example_user' );
 
 /** MySQL database password */
-define( 'DB_PASSWORD', getenv('WP_DB_PASSWORD') );
+define( 'DB_PASSWORD', 'example123' );
 
 /** MySQL hostname */
-define( 'DB_HOST', 'php_wp_c' );
+define( 'DB_HOST', 'mariadb_c' );
 
 /** Database Charset to use in creating database tables. */
 define( 'DB_CHARSET', 'utf8' );
 
 /** The Database Collate type. Don't change this if in doubt. */
 define( 'DB_COLLATE', '' );
+
 
 /**#@+
  * These are sample values.
@@ -100,40 +82,3 @@ if ( ! defined( 'ABSPATH' ) ) {
 /** Sets up WordPress vars and included files. */
 require_once ABSPATH . 'wp-settings.php';
 ?>
-<!-- 
-- Ensure that there is a Dockerfile.
-- Ensure that there is no NGINX in the Dockerfile.
-- Using the 'docker-compose ps' command, ensure that the container was 
-created (using the flag '-p' is authorized if necessary).
-- Ensure that there is a Volume. To do so:
-Run the command 'docker volume ls' then 'docker volume inspect 
-'. Verify that the result in the standard output contains 
-the path '/home/login/data/', where login is the login of the evaluated 
-student.
-- Ensure that you can add a comment using the available WordPress user.
-- Sign in with the administrator account to access the Administration 
-dashboard. The Admin username must not include 'admin' or 'Admin' 
-(e.g., admin, administrator, Admin-login, admin-123, and so forth).
-- From the Administration dashboard, edit a page. Verify on the website 
-that the page has been updated.
-If any of the above points is not correct, the evaluation process ends 
-now. -->
-
-<!-- MariaDB and its volume
-
-- Ensure that there is a Dockerfile.
-- Ensure that there is no NGINX in the Dockerfile.
-- Using the 'docker-compose ps' command, ensure that the container was 
-created (using the flag '-p' is authorized if necessary).
-- Ensure that there is a Volume. To do so:
-Run the command 'docker volume ls' then 'docker volume inspect 
-'. Verify that the result in the standard output contains 
-the path '/home/login/data/', where login is the login of the evaluated 
-student.
-- The evaluated student must be able to explain you how to login into 
-the database. Try to login into the SQL database as root but with no 
-password. If the login is successful, the evaluation process ends now.
-- Try to login into the SQL database with the user account and its 
-password. Verify that the database is not empty.
-If any of the above points is not correct, the evaluation process ends 
-now. -->

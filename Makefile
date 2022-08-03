@@ -53,6 +53,9 @@ clean:
 
 re: clean all
 
+# complete scratch
+scratch: ffclean all
+
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 # ADDITIONAL & DEVELOPMENT:
@@ -63,6 +66,9 @@ re: clean all
 fclean: clean
 	(cd $(SRC_DIR) && sudo docker system prune -a)
 
+# clean all and destroy all data and volumes
+ffclean: fclean new_volumes
+
 # Following rule deletes and recreates the directories of the persistent data.
 # Do this only to start over from scratch: all webpages and data will be lost.
 clear_local_volumes:
@@ -71,6 +77,7 @@ clear_local_volumes:
 	sudo rm -rf $(WP_DB_VOLUME) $(WP_CONTENT_VOLUME)
 
 new_volumes: clear_local_volumes create_volumes
+	sudo docker volume rm wp-content_volume wp-database_volume
 
 # DEBUGGING methods:
 

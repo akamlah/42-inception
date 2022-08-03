@@ -32,7 +32,7 @@ services:
       build:
         context: ./requirements/php_wp/
         dockerfile: php_wp.dockerfile
-      container_name: ${PHP_WORDPRESS_CONTAINER}
+      container_name: php_wp_c
       env_file: .env
       volumes:
         - wp-content_volume:/var/www/akamlah.42.fr/html/
@@ -46,14 +46,7 @@ services:
       build:
         context: ./requirements/mariadb/
         dockerfile: mariadb.dockerfile
-        args:
-          # - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
-          - WP_DB_NAME=${WP_DB_NAME}
-          # - WP_DB_USER=${WP_DB_USER}
-          # - WP_DB_PASSWORD=${WP_DB_PASSWORD}
-          - WP_DB_CHARSET=${WP_DB_CHARSET}
-          - WP_DB_COLLATE=${WP_DB_COLLATE}
-      container_name: ${MARIADB_CONTAINER}
+      container_name: mariadb_c
       env_file: .env
       volumes:
         - wp-database_volume:/var/lib/mysql/
@@ -68,8 +61,8 @@ services:
         context: ./requirements/nginx
         dockerfile: nginx.dockerfile
         args:
-          - PHP_WORDPRESS_CONTAINER=${PHP_WORDPRESS_CONTAINER}
-      container_name: ${NGINX_CONTAINER}
+          - PHP_WORDPRESS_CONTAINER=php_wp_c
+      container_name: nginx_c
       ports:
         - '443:443'
       volumes:
