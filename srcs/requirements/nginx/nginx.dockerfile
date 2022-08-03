@@ -17,6 +17,7 @@ RUN apt-get update \
 # (type "thisisunsafe" and enter in chrome)
 # data to build certs in copied file:
 COPY ./akamlah-42-fr_ssl.conf /etc/nginx/certs/akamlah-42-fr_ssl.conf
+
 RUN	set -e; \
 	openssl req \
 		-config /etc/nginx/certs/akamlah-42-fr_ssl.conf \
@@ -29,7 +30,15 @@ RUN	set -e; \
 # nginx basic configuration file: substitution
 COPY ./nginx.conf /etc/nginx/nginx.conf
 
-RUN chown -R www-data:www-data /var/www/akamlah.42.fr/html/; \
+# just some default value that will get overwritten by buildtime arg in compose file
+# (or else please privide PHP_WORDPRESS_CONTAINER as build option if php is remote service)
+ARG PHP_WORDPRESS_CONTAINER=localhost
+ENV PHP_WORDPRESS_CONTAINER=${PHP_WORDPRESS_CONTAINER}
+
+# set correct hostname for php service and ensure permissions fit.
+RUN	set -e; \
+	sed -i "s/PATSUBST_PHP_SERVICE/$PHP_WORDPRESS_CONTAINER/g" /etc/nginx/nginx.conf; \
+	chown -R www-data:www-data /var/www/akamlah.42.fr/html/; \
 	chmod +r /etc/nginx/certs/cert.crt;
 
 EXPOSE 443

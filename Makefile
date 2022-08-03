@@ -1,5 +1,6 @@
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#  inception project - LEMP stack, containerized.
+# MAKEFILE -
+# Inception project - LEMP stack, containerized.
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 # REQUIRED TREE
@@ -35,9 +36,7 @@ VOLUME_DIR = /home/akamlah/data
 WP_CONTENT_VOLUME = $(VOLUME_DIR)/wp-content_volume
 WP_DB_VOLUME = $(VOLUME_DIR)/wp-database_volume
 
-# MAIN COMMAND: ------------------------------------
 COMPOSE = sudo docker-compose -f $(COMPOSE_FILE)
-# --------------------------------------------------
 
 all: $(NAME)
 
@@ -46,7 +45,7 @@ $(NAME): $(ENV_FILE) $(COMPOSE_FILE) $(DOCKER_IMAGES) create_volumes
 	$(COMPOSE) --env-file $(ENV_FILE) up -d --build
 
 create_volumes:
-	@sudo mkdir -p $(WP_DB_VOLUME) $(WP_CONTENT_VOLUME) \
+	sudo mkdir -p $(WP_DB_VOLUME) $(WP_CONTENT_VOLUME) \
 	&& sudo chmod 777  $(WP_DB_VOLUME) $(WP_CONTENT_VOLUME)
 
 clean:
@@ -66,30 +65,61 @@ fclean: clean
 
 # Following rule deletes and recreates the directories of the persistent data.
 # Do this only to start over from scratch: all webpages and data will be lost.
+clear_local_volumes:
+	@echo -n "Deleting all existing data (^C to stop process) in "; sleep 1; echo -n "3 "; \
+	sleep 1; echo -n "2 "; sleep 1; echo -n "1 "; sleep 1; echo "Deleting all data"; sleep 1
+	sudo rm -rf $(WP_DB_VOLUME) $(WP_CONTENT_VOLUME)
 
-new_volumes: create_volumes
-	sudo mkdir -p $(WP_DB_VOLUME) $(WP_CONTENT_VOLUME) \
-	&& sudo chmod 777  $(WP_DB_VOLUME) $(WP_CONTENT_VOLUME)
+new_volumes: clear_local_volumes create_volumes
 
 # DEBUGGING methods:
 
 # view logs:
-
 logs:
-	sudo docker-compose logs
+	$(COMPOSE) logs
 
 # Open terminals in the containers:
 
 # services and containers are named the same in the compose file
-NGINX_CONTAINER_NAME = nginx
-MARIADB_CONTAINER_NAME = mariadb
-PHP_WORDPRESS_CONTAINER_NAME = php_wordpress
+NGINX_COMPOSE_SERVICE_NAME = nginx
+MARIADB_COMPOSE_SERVICE_NAME = mariadb
+PHP_WORDPRESS_COMPOSE_SERVICE_NAME = php_wordpress
 
 exec_mdb:
-	$(COMPOSE) exec $(NGINX_CONTAINER_NAME) /bin/bash
+	$(COMPOSE) exec $(MARIADB_COMPOSE_SERVICE_NAME) /bin/bash
 
 exec_php:
-	$(COMPOSE) exec $(PHP_WORDPRESS_CONTAINER_NAME) /bin/bash
+	$(COMPOSE) exec $(PHP_WORDPRESS_COMPOSE_SERVICE_NAME) /bin/bash
 
 exec_nginx:
-	$(COMPOSE) exec $(NGINX_CONTAINER_NAME) /bin/bash
+	$(COMPOSE) exec $(NGINX_COMPOSE_SERVICE_NAME) /bin/bash
+
+
+# To redo just one container: rm with one of these rules and then run: make prune
+# This will clear all images & cache linked with only stopped and removed containers.
+# Then run make to rebuild and reintegrate the removed service
+# Or use 're' rules below.
+rm_nginx:
+	$(COMPOSE) stop $(NGINX_COMPOSE_SERVICE_NAME) \
+	&& $(COMPOSE) rm $(NGINX_COMPOSE_SERVICE_NAME)
+
+rm_mdb:
+	$(COMPOSE) stop $(MARIADB_COMPOSE_SERVICE_NAME) \
+	&& $(COMPOSE) rm $(MARIADB_COMPOSE_SERVICE_NAME)
+
+rm_php:
+	$(COMPOSE) stop $(PHP_WORDPRESS_COMPOSE_SERVICE_NAME) \
+	&& $(COMPOSE) rm $(PHP_WORDPRESS_COMPOSE_SERVICE_NAME)
+
+prune:
+	sudo docker system prune
+
+prune_all:
+	sudo docker system prune -a
+
+re_nginx: rm_nginx prune_all all
+re_mdb: rm_mdb prune_all all
+re_php: rm_php prune_all all
+
+ps:
+	sudo docker ps

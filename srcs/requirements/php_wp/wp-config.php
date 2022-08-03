@@ -19,22 +19,22 @@
  */
 
 /** MySQL database name */
-define( 'DB_NAME', 'inception' );
+define( 'DB_NAME', getenv('WP_DB_NAME') );
 
 /** MySQL database username */
-define( 'DB_USER', getenv('WP_USER') );
+define( 'DB_USER', getenv('WP_DB_USER') );
 
 /** MySQL database password */
-define( 'DB_PASSWORD', getenv('WP_PASSWORD') );
+define( 'DB_PASSWORD', getenv('WP_DB_PASSWORD') );
 
 /** MySQL hostname */
-define( 'DB_HOST', 'mdbc' );
+define( 'DB_HOST', getenv('WP_DB_HOST') );
 
 /** Database Charset to use in creating database tables. */
-define( 'DB_CHARSET', 'utf8' );
+define( 'DB_CHARSET', getenv('WP_DB_CHARSET') );
 
 /** The Database Collate type. Don't change this if in doubt. */
-define( 'DB_COLLATE', '' );
+define( 'DB_COLLATE', getenv('WP_DB_COLLATE') );
 
 /**#@+
  * These are sample values.

@@ -1,3 +1,7 @@
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# DOCKER-COMPOSE FILE -
+# Inception project - LEMP stack, containerized.
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 version: "2.2"
 
@@ -28,31 +32,44 @@ services:
       build:
         context: ./requirements/php_wp/
         dockerfile: php_wp.dockerfile
-      container_name: php_wordpress
+      container_name: ${PHP_WORDPRESS_CONTAINER}
+      env_file: .env
       volumes:
         - wp-content_volume:/var/www/akamlah.42.fr/html/
       networks:
         - inception_net
       depends_on:
         - mariadb
-      restart: on-failure
+      restart: always
 
     mariadb:
       build:
         context: ./requirements/mariadb/
         dockerfile: mariadb.dockerfile
-      container_name: mariadb
+        args:
+          # - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+          - WP_DB_NAME=${WP_DB_NAME}
+          # - WP_DB_USER=${WP_DB_USER}
+          # - WP_DB_PASSWORD=${WP_DB_PASSWORD}
+          - WP_DB_CHARSET=${WP_DB_CHARSET}
+          - WP_DB_COLLATE=${WP_DB_COLLATE}
+      container_name: ${MARIADB_CONTAINER}
+      env_file: .env
       volumes:
         - wp-database_volume:/var/lib/mysql/
       networks:
         - inception_net
-      restart: on-failure
+      restart: always
+      # remove
+      # tty: true
 
     nginx:
       build:
         context: ./requirements/nginx
         dockerfile: nginx.dockerfile
-      container_name: nginx
+        args:
+          - PHP_WORDPRESS_CONTAINER=${PHP_WORDPRESS_CONTAINER}
+      container_name: ${NGINX_CONTAINER}
       ports:
         - '443:443'
       volumes:
@@ -61,4 +78,4 @@ services:
         - inception_net
       depends_on:
         - php_wordpress
-      restart: on-failure
+      restart: always
