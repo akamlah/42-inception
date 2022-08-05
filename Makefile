@@ -53,21 +53,21 @@ create_volumes:
 clean:
 	$(COMPOSE) down
 
-re: clean all
+re: fclean all
 
-# complete scratch - deletes all data
-scratch: ffclean all
-
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
-# ADDITIONAL & DEVELOPMENT:
-
-# FCLEAN: clears docker image build cache, but clean should be enough in most cases, that is why
-# 're' calls just 'clean'.
-# Use fclean only to restart from complete scratch.
+# FCLEAN: clears docker image build cache
 fclean: clean
 	(cd $(SRC_DIR) && sudo docker system prune -a)
 
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+# [ ! ]
+# complete scratch - deletes all data
+scratch: ffclean all
+
+# ADDITIONAL & DEVELOPMENT:
+
+# [ ! ]
 # clean all cached and dangeling images and destroy all data and volumes
 ffclean: fclean new_volumes
 
