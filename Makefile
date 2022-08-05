@@ -37,14 +37,13 @@ VOLUME_DIR = /home/akamlah/data
 WP_CONTENT_VOLUME = $(VOLUME_DIR)/wp-content_volume
 WP_DB_VOLUME = $(VOLUME_DIR)/wp-database_volume
 
+# command
 COMPOSE = sudo docker-compose -f $(COMPOSE_FILE)
 
 all: $(NAME)
 
 $(NAME): $(ENV_FILE) $(COMPOSE_FILE) $(DOCKER_IMAGES) create_volumes
 	@echo "Building containers"
-# $(COMPOSE) --env-file $(ENV_FILE) build
-# $(COMPOSE) --env-file $(ENV_FILE) run -d
 	$(COMPOSE) --env-file $(ENV_FILE) up -d --build
 
 create_volumes:
@@ -56,20 +55,20 @@ clean:
 
 re: clean all
 
-# complete scratch
+# complete scratch - deletes all data
 scratch: ffclean all
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 # ADDITIONAL & DEVELOPMENT:
 
-# FCLEAN: clears docker image build cache, but clean should be enough in most cases, that is why 
-# re' calls just 'clean'.
+# FCLEAN: clears docker image build cache, but clean should be enough in most cases, that is why
+# 're' calls just 'clean'.
 # Use fclean only to restart from complete scratch.
 fclean: clean
 	(cd $(SRC_DIR) && sudo docker system prune -a)
 
-# clean all and destroy all data and volumes
+# clean all cached and dangeling images and destroy all data and volumes
 ffclean: fclean new_volumes
 
 # Following rule deletes and recreates the directories of the persistent data.
