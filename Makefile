@@ -42,6 +42,8 @@ all: $(NAME)
 
 $(NAME): $(ENV_FILE) $(COMPOSE_FILE) $(DOCKER_IMAGES) create_volumes
 	@echo "Building containers"
+# $(COMPOSE) --env-file $(ENV_FILE) build
+# $(COMPOSE) --env-file $(ENV_FILE) run -d
 	$(COMPOSE) --env-file $(ENV_FILE) up -d --build
 
 create_volumes:
