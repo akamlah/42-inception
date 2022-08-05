@@ -50,8 +50,7 @@ RUN	set -ex; \
 
 COPY ./wp_entrypoint.sh /usr/local/bin/
 
-# force to stay in foreground, and ignore daemonize option from config file
 ENTRYPOINT ["wp_entrypoint.sh"]
 
-# CMD ["/bin/bash"]
+# force to stay in foreground, and ignore daemonize option from config file
 CMD ["/usr/sbin/php-fpm7.3", "--nodaemonize"]
