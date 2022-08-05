@@ -2,7 +2,8 @@ ARG VERSION=10.12
 FROM --platform=amd64 debian:${VERSION}
 
 # install needed packages, set frontend to non-interactive to silence debconf warnings
-RUN apt-get update \
+RUN set -ex; \
+	apt-get update \
 	&& DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends --no-install-suggests \
 		nginx \
 		openssl \
@@ -37,8 +38,7 @@ ENV PHP_WORDPRESS_CONTAINER=${PHP_WORDPRESS_CONTAINER}
 RUN	set -e; \
 	sed -i "s/PATSUBST_PHP_SERVICE/$PHP_WORDPRESS_CONTAINER/g" /etc/nginx/nginx.conf; \
 	chown -R www-data:www-data /var/www/example_page/html/; \
-	chmod +r /etc/nginx/certs/cert.crt; \
-	unset WP_PASSWORD WP_USER DB_HOST DB_NAME MYSQL_ROOT_PASSWORD PHP_WORDPRESS_CONTAINER
+	chmod +r /etc/nginx/certs/cert.crt;
 
 EXPOSE 443
 

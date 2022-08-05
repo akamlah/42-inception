@@ -17,8 +17,8 @@ DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.
 DROP DATABASE IF EXISTS test;
 DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%';
 CREATE DATABASE IF NOT EXISTS $DB_NAME;
-CREATE USER IF NOT EXISTS '$WP_USER'@'%' IDENTIFIED BY '$WP_PASSWORD';
-GRANT ALL ON $DB_NAME.* TO '$WP_USER'@'%' IDENTIFIED BY '$WP_PASSWORD';
+CREATE USER IF NOT EXISTS '$WP_DB_USER'@'%' IDENTIFIED BY '$WP_DB_PASSWORD';
+GRANT ALL ON $DB_NAME.* TO '$WP_DB_USER'@'%' IDENTIFIED BY '$WP_DB_PASSWORD';
 FLUSH PRIVILEGES;
 _EOF_
 
@@ -27,7 +27,5 @@ mysqladmin --user=root --password=$MYSQL_ROOT_PASSWORD shutdown
 
 fi
 
-unset WP_PASSWORD WP_USER DB_HOST DB_NAME MYSQL_ROOT_PASSWORD PHP_WORDPRESS_CONTAINER
-
-# execute "mysqld_safe" passed as argment by 'CMD' -> restart mysql as daemon in foregound
+# execute "mysqld_safe" passed as argment by 'CMD' -> restart mysql as daemon
 exec "$@"

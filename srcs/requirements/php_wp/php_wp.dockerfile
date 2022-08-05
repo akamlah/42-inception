@@ -6,7 +6,8 @@ ARG PHP_VERSION=7.3
 ENV PHP_VERSION_ENV=${PHP_VERSION}
 
 # PHP: install needed packages, set frontend to non-interactive to silence debconf warnings
-RUN apt-get update \
+RUN set -ex; \
+	apt-get update \
 	&& DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends --no-install-suggests \
 		php${PHP_VERSION} \
 		php${PHP_VERSION}-cli \

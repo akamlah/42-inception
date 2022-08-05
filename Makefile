@@ -132,3 +132,6 @@ re_php: rm_php prune_all all
 
 ps:
 	sudo docker ps
+
+# show that wordpress database has two users:
+# select host, user, password from mysql.user; 
