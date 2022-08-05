@@ -35,13 +35,12 @@ services:
       container_name: php_wp_c
       env_file: .env
       volumes:
-        - wp-content_volume:/var/www/akamlah.42.fr/html/
+        - wp-content_volume:/var/www/example_page/html/
       networks:
         - inception_net
       depends_on:
         - mariadb
       restart: always
-      # tty: true
 
     mariadb:
       build:
@@ -54,8 +53,6 @@ services:
       networks:
         - inception_net
       restart: always
-      # remove
-      # tty: true
 
     nginx:
       build:
@@ -67,7 +64,7 @@ services:
       ports:
         - '443:443'
       volumes:
-        - wp-content_volume:/var/www/akamlah.42.fr/html/
+        - wp-content_volume:/var/www/example_page/html/
       networks:
         - inception_net
       depends_on:

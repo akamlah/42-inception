@@ -3,8 +3,9 @@
 # Inception project - LEMP stack, containerized.
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-# REQUIRED TREE
+# TREE
 
+# ├── .gitignore
 # ├── Makefile
 # └── srcs
 #     ├── docker-compose.yml
@@ -19,7 +20,7 @@
 #         │   └── nginx.dockerfile
 #         └── php_wp
 #             ├── php_wp.dockerfile
-#             └── wp-config.php
+#             └── wp_entrypoint.sh
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 

@@ -4,7 +4,7 @@ set -e
 
 # service mysql start
 
-if [ ! -d /var/lib/mysql/example_db ]; then
+if [ ! -d /var/lib/mysql/$DB_NAME ]; then
 
 # temporarily start to create init files
 service mysql start
@@ -16,9 +16,9 @@ DELETE FROM mysql.user WHERE User='';
 DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');
 DROP DATABASE IF EXISTS test;
 DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%';
-CREATE DATABASE IF NOT EXISTS example_db;
+CREATE DATABASE IF NOT EXISTS $DB_NAME;
 CREATE USER IF NOT EXISTS '$WP_USER'@'%' IDENTIFIED BY '$WP_PASSWORD';
-GRANT ALL ON example_db.* TO '$WP_USER'@'%' IDENTIFIED BY '$WP_PASSWORD';
+GRANT ALL ON $DB_NAME.* TO '$WP_USER'@'%' IDENTIFIED BY '$WP_PASSWORD';
 FLUSH PRIVILEGES;
 _EOF_
 
@@ -27,8 +27,7 @@ mysqladmin --user=root --password=$MYSQL_ROOT_PASSWORD shutdown
 
 fi
 
-# execute "mysqld_safe" passed as argment by 'CMD'
-# -> restart mysql as daemon in foregound
-exec "$@"
+unset WP_PASSWORD WP_USER DB_HOST DB_NAME MYSQL_ROOT_PASSWORD PHP_WORDPRESS_CONTAINER
 
-# CREATE DATABASE IF NOT EXISTS inception;
+# execute "mysqld_safe" passed as argment by 'CMD' -> restart mysql as daemon in foregound
+exec "$@"
