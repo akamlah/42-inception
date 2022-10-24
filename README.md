@@ -24,3 +24,5 @@ The makefile will create two folders at this location:
 * ```wp-database_volume``` containing the database for you page once you've set one up.
 
 To do so, connect to //https:localhost:443// and follow the instructions of the inistallation wizard.
+
+This is meant for local development or as an exercise, so the ssl certificates are self-signed: you might have to accept a waring abput the security of the page once you connect to it, depending on your browser. In Chrome for example, type "thisisunsafe" and hit enter - you will be able to see the wordpresss installer.
